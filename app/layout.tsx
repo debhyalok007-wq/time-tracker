@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-br from-gray-100 via-gray-200 to-gray-100 min-h-screen flex flex-col pb-28">
+      <body className="bg-gray-100 text-gray-900 min-h-screen flex flex-col pb-28">
 
         <Header />
 
