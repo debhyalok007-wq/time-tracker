@@ -7,6 +7,8 @@ export default function BottomNav() {
 
   const pathname = usePathname()
 
+  if (pathname === "/widget") return null
+
   return (
     <nav className="fixed bottom-6 left-0 right-0 z-40 flex justify-center px-4">
 
@@ -50,4 +52,5 @@ export default function BottomNav() {
       </div>
     </nav>
   )
+
 }
