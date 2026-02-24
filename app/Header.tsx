@@ -1,9 +1,13 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import { usePathname } from "next/navigation"
 import { supabase } from "../lib/supabase"
 
 export default function Header() {
+
+  const pathname = usePathname()
+  const isWidget = pathname === "/widget"
 
   const [user, setUser] = useState<any>(null)
   const [showProfile, setShowProfile] = useState(false)
@@ -23,18 +27,28 @@ export default function Header() {
         setShowProfile(false)
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
   const logout = async () => {
     await supabase.auth.signOut()
-    window.location.reload()
+    window.location.href = "/login"
+  }
+
+  const login = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+    })
   }
 
   const getInitials = (email: string) => {
     return email.split("@")[0].substring(0, 2).toUpperCase()
   }
+
+  // 🚀 Hide header completely in widget mode
+  if (isWidget) return null
 
   return (
     <header className="px-6 pt-6 pb-4">
@@ -48,8 +62,8 @@ export default function Header() {
           <path d="M19.259 12.2865V6.3457H25.1998L19.259 12.2865Z" fill="white"/>
         </svg>
 
-        {/* PROFILE */}
-        {user && (
+        {/* RIGHT SIDE */}
+        {user ? (
           <div className="relative" ref={profileRef}>
 
             <div
@@ -82,11 +96,17 @@ export default function Header() {
             )}
 
           </div>
+        ) : (
+          <button
+            onClick={login}
+            className="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm"
+          >
+            Login
+          </button>
         )}
 
       </div>
 
-      {/* Light separator */}
       <div className="mt-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-70"></div>
 
     </header>
